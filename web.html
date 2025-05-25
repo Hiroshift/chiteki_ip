@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>メディアミックス総収益 世界ランキング - 日本のIPパワー (JS強化版)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background-color: #F0F4F8;
+            overflow-x: hidden;
+        }
+        .text-primary { color: #073B4C; }
+        .text-accent-red { color: #FF6B6B; }
+        .text-accent-yellow { color: #FFD166; }
+        .text-accent-green { color: #06D6A0; }
+        .text-accent-blue { color: #118AB2; }
+
+        .bg-accent-red { background-color: #FF6B6B; }
+        .bg-accent-yellow { background-color: #FFD166; }
+        .bg-accent-green { background-color: #06D6A0; }
+        .bg-accent-blue { background-color: #118AB2; }
+        .bg-primary-dark { background-color: #073B4C; }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px; 
+            max-height: 450px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        @media (min-width: 1024px) {
+             .chart-container {
+                height: 450px;
+            }
+        }
+
+        .flowchart-item {
+            border: 2px solid #118AB2;
+            color: #073B4C;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .flowchart-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .flowchart-arrow {
+            color: #118AB2;
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .kpi-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .kpi-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.12), 0 6px 6px rgba(0,0,0,0.1);
+        }
+        .interactive-list-item {
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .interactive-list-item:hover {
+            background-color: #e0f2fe; /* Light blue hover */
+            transform: translateX(5px);
+        }
+        .animated-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .animated-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .flowchart-animated-item {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .flowchart-animated-item.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+    </style>
+</head>
+<body class="text-primary">
+
+    <header class="bg-primary-dark text-white py-8 shadow-lg animated-section">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-3xl md:text-4xl font-bold">世界を席巻する日本のIPパワー</h1>
+            <p class="mt-2 text-lg md:text-xl">TitleMax社「メディアミックス総収益世界ランキング」より</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+
+        <section id="introduction" class="mb-12 animated-section">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold text-accent-blue mb-4">はじめに：ランキングの衝撃</h2>
+                <p class="text-lg leading-relaxed mb-3">
+                    アメリカの金融サービス企業TitleMax社が発表した「メディアミックス総収益世界ランキング」は、エンターテイメント業界における各知的財産（IP）の商業的成功を浮き彫りにしました。このランキングで特に注目されるのは、日本発のキャラクターやフランチャイズが世界市場で圧倒的な存在感を示している点です。本インフォグラフィックでは、このランキングデータをもとに、日本のIPが持つ驚異的な経済効果と、その背景にあるメディアミックス戦略の力強さを探ります。
+                </p>
+                <p class="text-sm text-gray-600">
+                    このランキング情報は主に2023年11月頃に報じられ、日本のIPの国際的な影響力を示すものとして話題となりました。
+                </p>
+            </div>
+        </section>
+
+        <section id="ranking-overview" class="mb-12 animated-section">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold text-accent-green mb-4">メディアミックス総収益 トップ10</h2>
+                <p class="text-lg leading-relaxed mb-6">
+                    TitleMax社によるランキングは、各IPがゲーム、アニメ、映画、グッズ販売など、複数の媒体展開（メディアミックス）を通じて得たとされる推定総収益に基づいています。驚くべきことに、トップ10のうち半数の5つが日本発のIPであり、その商業的な成功規模の大きさを示しています。以下は、報告されているトップ10のIPとその推定総収益（億ドル）です。
+                </p>
+                <div class="chart-container mb-6">
+                    <canvas id="top10RankingChart"></canvas>
+                </div>
+                <p class="text-sm text-gray-600 mt-4">
+                    注: 上記グラフにおいて、アンパンマン、ディズニー・プリンセス、マリオ、マーベル・シネマティック・ユニバース、週刊少年ジャンプの収益額は、参照資料に具体的な記載がなかったため0として表示していますが、トップ10にランクインしている事実は変わりません。これらのIPもまた、世界的に絶大な影響力と収益性を誇ります。「週刊少年ジャンプ」は、個別の作品ではなく、多くの人気IPを生み出し続けるプラットフォームとしての価値が評価されています。
+                </p>
+                <div class="mt-6 p-4 bg-blue-50 border border-accent-blue rounded-lg">
+                    <h3 class="text-xl font-semibold text-accent-blue mb-2">ランキングのポイント</h3>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li><span class="font-bold">日本勢の躍進：</span>トップ10に5つの日本発IPがランクイン。</li>
+                        <li><span class="font-bold">圧倒的なポケモン：</span>ポケットモンスターが921億ドル超で首位。</li>
+                        <li><span class="font-bold">多様なIP：</span>キャラクターだけでなく、「週刊少年ジャンプ」のようなプラットフォームも評価。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="japanese-titans" class="mb-12 animated-section">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold text-accent-red mb-6">輝く日本の巨星たち：トップIP紹介</h2>
+                <p class="text-lg leading-relaxed mb-6">
+                    ランキング上位に輝く日本発のIPは、長年にわたり世界中のファンを魅了し続けています。その中でも特に驚異的な収益を上げている代表的なIPを見てみましょう。
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="kpi-card border-l-4 border-accent-yellow">
+                        <h3 class="text-xl font-semibold text-accent-yellow mb-2">ポケットモンスター (ポケモン) 🇯🇵</h3>
+                        <p class="stat-number text-accent-yellow" data-target="921.21">0</p>
+                        <p class="text-sm text-gray-700">ゲームから始まり、アニメ、カードゲーム、映画、関連グッズと多岐にわたる展開で世界No.1の収益を記録。</p>
+                    </div>
+                    <div class="kpi-card border-l-4 border-accent-red">
+                        <h3 class="text-xl font-semibold text-accent-red mb-2">ハローキティ 🇯🇵</h3>
+                        <p class="stat-number text-accent-red" data-target="800.26">0</p>
+                        <p class="text-sm text-gray-700">キャラクターグッズを中心に、世代を超えて愛される世界的アイコン。その経済効果は計り知れません。</p>
+                    </div>
+                </div>
+                <div class="mt-8">
+                    <h3 class="text-xl font-semibold text-primary mb-3">他にも強力な日本のIPがランクイン</h3>
+                    <div class="space-y-3">
+                        <p class="interactive-list-item p-2 rounded-md"><span class="font-bold text-accent-blue">アンパンマン 🇯🇵:</span> 子供向けキャラクターとして不動の人気を誇り、長寿アニメや商品展開で高い収益を上げています。</p>
+                        <p class="interactive-list-item p-2 rounded-md"><span class="font-bold text-accent-green">マリオ 🇯🇵:</span> 任天堂を代表するキャラクター。ゲームシリーズの世界的ヒットは他の追随を許しません。</p>
+                        <p class="interactive-list-item p-2 rounded-md"><span class="font-bold text-accent-red">週刊少年ジャンプ 🇯🇵:</span> 数々の大ヒット漫画IPを生み出し続ける出版ブランド。作品群全体の経済効果は甚大です。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="media-mix-power" class="mb-12 animated-section">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold text-accent-blue mb-4">成功の鍵：メディアミックス戦略とは？</h2>
+                <p class="text-lg leading-relaxed mb-6">
+                    これらのIPが莫大な収益を生み出す背景には、「メディアミックス」という戦略があります。これは、一つの原作やキャラクターを元に、ゲーム、アニメ、映画、漫画、音楽、グッズ、イベントなど、多様なメディアで展開し、ファン層の拡大と収益機会の最大化を図る手法です。
+                </p>
+                <div id="flowchart" class="flex flex-col items-center space-y-4 md:space-y-0 md:flex-row md:justify-around md:items-start p-4 rounded-lg">
+                    <div class="text-center flowchart-animated-item">
+                        <div class="p-4 flowchart-item rounded-lg shadow text-lg font-semibold">原作IP</div>
+                    </div>
+                    <div class="text-2xl flowchart-arrow self-center hidden md:block transform rotate-90 md:rotate-0 flowchart-animated-item">➔</div>
+                    <div class="text-2xl flowchart-arrow self-center md:hidden transform rotate-90 md:rotate-0 flowchart-animated-item">⬇</div>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-center">
+                        <div class="p-3 flowchart-item rounded-md shadow flowchart-animated-item">🎮 ゲーム</div>
+                        <div class="p-3 flowchart-item rounded-md shadow flowchart-animated-item">🎬 アニメ/映画</div>
+                        <div class="p-3 flowchart-item rounded-md shadow flowchart-animated-item">📚 漫画/出版物</div>
+                        <div class="p-3 flowchart-item rounded-md shadow flowchart-animated-item">🧸 グッズ</div>
+                        <div class="p-3 flowchart-item rounded-md shadow flowchart-animated-item">🎵 音楽</div>
+                        <div class="p-3 flowchart-item rounded-md shadow flowchart-animated-item">🎉 イベント</div>
+                    </div>
+                    <div class="text-2xl flowchart-arrow self-center hidden md:block transform rotate-90 md:rotate-0 flowchart-animated-item">➔</div>
+                    <div class="text-2xl flowchart-arrow self-center md:hidden transform rotate-90 md:rotate-0 flowchart-animated-item">⬇</div>
+                    <div class="text-center flowchart-animated-item">
+                         <div class="p-4 bg-accent-green text-white rounded-lg shadow text-lg font-semibold">巨大な経済効果</div>
+                    </div>
+                </div>
+                 <p class="text-md leading-relaxed mt-6">
+                    この戦略により、IPは様々な接点を通じて消費者にリーチし、長期的なエンゲージメントを構築します。各メディアが相互に作用し合うことで、IP全体のブランド価値と収益性が飛躍的に高まるのです。
+                </p>
+            </div>
+        </section>
+        
+        <section id="global-impact" class="mb-12 animated-section">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold text-accent-green mb-4">世界市場における日本のIPの影響力</h2>
+                <p class="text-lg leading-relaxed mb-3">
+                    TitleMax社のランキングは、単なる人気投票ではなく、IPが生み出す「推定総収益」に基づいている点が重要です。これは、キャラクターや作品が持つ文化的な影響力だけでなく、実際の市場における商業的な成功度合いと経済的な価値をダイレクトに示しています。
+                </p>
+                <p class="text-lg leading-relaxed mb-3">
+                    日本発のIPがこれほどまでに高い収益を上げている事実は、日本のポップカルチャーが国境を越えて広く受け入れられ、グローバルなエンターテイメント市場において極めて重要な地位を占めていることを証明しています。これらのIPは、単に商品を売るだけでなく、日本の文化や価値観を世界に発信する役割も担っていると言えるでしょう。
+                </p>
+                 <p class="text-sm text-gray-600">
+                    このランキング情報は、例えば訪日外国人向け情報サイト「訪日ラボ」などでも紹介され、日本のソフトパワーの一端を示す事例として取り上げられました。
+                </p>
+            </div>
+        </section>
+
+        <section id="conclusion" class="animated-section">
+            <div class="bg-primary-dark text-white rounded-lg shadow-md p-8 text-center">
+                <h2 class="text-2xl font-bold mb-4">まとめ：日本のIPは世界の宝</h2>
+                <p class="text-lg leading-relaxed mb-3">
+                    TitleMax社の「メディアミックス総収益世界ランキング」は、ポケットモンスターを筆頭に、ハローキティ、アンパンマン、マリオ、そして週刊少年ジャンプといった日本発のIPが、世界的に見ていかに巨大な商業的成功を収めているかを明確に示しました。
+                </p>
+                <p class="text-lg leading-relaxed">
+                    これらの成功は、魅力的なキャラクターやストーリーだけでなく、巧みなメディアミックス戦略によるものです。日本のIPは、これからも世界中の人々を魅了し、大きな経済的価値を生み出し続けることでしょう。
+                </p>
+                <p class="text-xs mt-6">
+                    情報源: TitleMax社の発表 (2023年頃) および関連報道に基づく。
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-center py-6 text-sm text-gray-600 animated-section">
+        <p>&copy; 2025 メディアミックスランキングインフォグラフィック. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const top10Data = {
+            labels: [
+                "ポケットモンスター", 
+                "ハローキティ", 
+                "くまのプーさん", 
+                ["ミッキーマウスと", "仲間たち"],
+                "スター・ウォーズ", 
+                "アンパンマン", 
+                "ディズニー・プリンセス",
+                "マリオ", 
+                ["マーベル・シネマティック・", "ユニバース"],
+                "週刊少年ジャンプ"
+            ],
+            datasets: [{
+                label: '推定総収益 (億ドル)',
+                data: [921.21, 800.26, 750.34, 705.87, 656.31, 0, 0, 0, 0, 0],
+                backgroundColor: [
+                    '#FFD166', '#FF6B6B', '#FFD166', '#FF6B6B', '#06D6A0',
+                    '#118AB2', '#FF6B6B', '#06D6A0', '#118AB2', '#FFD166'
+                ],
+                borderColor: '#073B4C',
+                borderWidth: 1
+            }]
+        };
+
+        window.onload = function() {
+            const top10Ctx = document.getElementById('top10RankingChart').getContext('2d');
+            new Chart(top10Ctx, {
+                type: 'bar',
+                data: top10Data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: { display: true, text: '推定総収益 (億ドル)', color: '#073B4C', font: { size: 14 }},
+                            ticks: { color: '#073B4C' }
+                        },
+                        y: {
+                            ticks: { color: '#073B4C', font: { size: 12 }, autoSkip: false }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: true, text: 'メディアミックス総収益 トップ10 IP', color: '#073B4C', font: { size: 18, weight: 'bold' }, padding: { top: 10, bottom: 20 }},
+                        tooltip: {
+                            backgroundColor: '#073B4C', titleColor: '#FFFFFF', bodyColor: '#FFFFFF',
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const item = tooltipItems[0];
+                                    let label = item.chart.data.labels[item.dataIndex];
+                                    return Array.isArray(label) ? label.join(' ') : label;
+                                },
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) { label += ': '; }
+                                    if (context.parsed.x !== null) {
+                                        if (context.raw === 0 && context.dataIndex >= 5) {
+                                            label += '収益額情報なし (トップ10入り)';
+                                        } else {
+                                            label += context.parsed.x.toLocaleString() + ' 億ドル';
+                                        }
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const animatedSections = document.querySelectorAll('.animated-section');
+            const flowchartItems = document.querySelectorAll('.flowchart-animated-item');
+            const statNumbers = document.querySelectorAll('.stat-number');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const sectionObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        if (entry.target.id === 'japanese-titans') {
+                            statNumbers.forEach(num => animateCountUp(num));
+                        }
+                        if (entry.target.id === 'media-mix-power') {
+                            flowchartItems.forEach((item, index) => {
+                                setTimeout(() => {
+                                    item.classList.add('visible');
+                                }, index * 150);
+                            });
+                        }
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            animatedSections.forEach(section => {
+                sectionObserver.observe(section);
+            });
+            
+            function animateCountUp(element) {
+                const target = parseFloat(element.dataset.target);
+                const duration = 1500; 
+                const frameDuration = 1000 / 60;
+                const totalFrames = Math.round(duration / frameDuration);
+                let frame = 0;
+                const increment = target / totalFrames;
+
+                function updateNumber() {
+                    frame++;
+                    const currentVal = increment * frame;
+                    if (frame === totalFrames) {
+                        element.textContent = target.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                    } else {
+                        element.textContent = currentVal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                        requestAnimationFrame(updateNumber);
+                    }
+                }
+                requestAnimationFrame(updateNumber);
+            }
+        };
+    </script>
+</body>
+</html>
